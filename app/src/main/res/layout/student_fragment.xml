@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+>
+
+    <Spinner
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/groupInput" android:layout_below="@+id/instituteInput"
+            android:ems="10"
+            android:layout_centerHorizontal="true"/>
+
+    <Spinner
+            android:id="@+id/instituteInput"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userTypeRadio"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:inputType="text"/>
+
+</RelativeLayout>

@@ -1,0 +1,110 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/registerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+    <TextView
+            android:id="@+id/formNameTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="0dp"
+            android:text="Реєстраційна форма"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+
+    <EditText
+            android:id="@+id/usernameInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/formNameTxt"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:hint="E-mail"
+            android:inputType="textEmailAddress"/>
+
+    <requestFocus/>
+
+    <EditText
+            android:id="@+id/passwordInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/usernameInput"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:hint="Пароль"
+            android:inputType="textPassword"/>
+
+    <EditText
+            android:id="@+id/confirmPasswordInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/passwordInput"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:hint="Ще раз пароль"
+            android:inputType="textPassword"/>
+
+    <RadioGroup
+            android:id="@+id/userTypeRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/usernameInput"
+            android:layout_below="@+id/confirmPasswordInput"
+            android:layout_marginTop="10dp">
+
+        <RadioButton
+                android:id="@+id/studentRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Студент"/>
+
+        <RadioButton
+                android:id="@+id/lecturerRadio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Викладач"/>
+    </RadioGroup>
+
+    <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userTypeRadio"
+            android:layout_centerHorizontal="true">
+    </FrameLayout>
+
+    <Button
+            android:id="@+id/registerButton"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/fragmentContainer"
+            android:layout_alignRight="@+id/userTypeRadio"
+            android:layout_below="@+id/fragmentContainer"
+            android:text="Готово"/>
+
+    <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/registerButton"
+            android:layout_alignBottom="@+id/registerButton"
+            android:layout_alignRight="@+id/fragmentContainer"
+            android:text="Назад"/>
+    <TextView
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/message1"
+            android:layout_below="@+id/cancelButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"/>
+
+</RelativeLayout>
