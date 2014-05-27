@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class ServicePeriod{
 
     @SerializedName("auditorium")
-   	private Auditorium auditorium;
+   	private ServiceAuditorium serviceAuditorium;
 
     @SerializedName("day")
    	private String day;
@@ -29,8 +29,8 @@ public class ServicePeriod{
     @SerializedName("periodType")
    	private String periodType;
 
-    public ServicePeriod(Auditorium auditorium, String day, String discipline, String groupID, String lecturer, String periodID, String periodNumber, String periodType) {
-        this.auditorium = auditorium;
+    public ServicePeriod(ServiceAuditorium serviceAuditorium, String day, String discipline, String groupID, String lecturer, String periodID, String periodNumber, String periodType) {
+        this.serviceAuditorium = serviceAuditorium;
         this.day = day;
         this.discipline = discipline;
         this.groupID = groupID;
@@ -40,11 +40,11 @@ public class ServicePeriod{
         this.periodType = periodType;
     }
 
-    public Auditorium getAuditorium(){
-		return this.auditorium;
+    public ServiceAuditorium getServiceAuditorium(){
+		return this.serviceAuditorium;
 	}
-	public void setAuditorium(Auditorium auditorium){
-		this.auditorium = auditorium;
+	public void setServiceAuditorium(ServiceAuditorium serviceAuditorium){
+		this.serviceAuditorium = serviceAuditorium;
 	}
  	public String getDay(){
 		return this.day;
@@ -96,7 +96,7 @@ public class ServicePeriod{
 
         ServicePeriod that = (ServicePeriod) o;
 
-        if (auditorium != null ? !auditorium.equals(that.auditorium) : that.auditorium != null) return false;
+        if (serviceAuditorium != null ? !serviceAuditorium.equals(that.serviceAuditorium) : that.serviceAuditorium != null) return false;
         if (day != null ? !day.equals(that.day) : that.day != null) return false;
         if (discipline != null ? !discipline.equals(that.discipline) : that.discipline != null) return false;
         if (groupID != null ? !groupID.equals(that.groupID) : that.groupID != null) return false;
@@ -110,7 +110,7 @@ public class ServicePeriod{
 
     @Override
     public int hashCode() {
-        int result = auditorium != null ? auditorium.hashCode() : 0;
+        int result = serviceAuditorium != null ? serviceAuditorium.hashCode() : 0;
         result = 31 * result + (day != null ? day.hashCode() : 0);
         result = 31 * result + (discipline != null ? discipline.hashCode() : 0);
         result = 31 * result + (groupID != null ? groupID.hashCode() : 0);
@@ -124,7 +124,7 @@ public class ServicePeriod{
     @Override
     public String toString() {
         return "ServicePeriod{" +
-                "auditorium=" + auditorium +
+                "auditorium=" + serviceAuditorium +
                 ", day='" + day + '\'' +
                 ", discipline='" + discipline + '\'' +
                 ", groupID='" + groupID + '\'' +

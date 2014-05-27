@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="75dp"
+        >
+
+    <ImageView
+            android:id="@+id/periodType"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="5dip"
+            android:layout_marginLeft="5dip"
+            android:contentDescription="TODO"
+            android:gravity="center_horizontal"
+            android:src="@drawable/ic_launcher"/>
+    <TextView
+            android:id="@+id/dayOfWeek"
+            android:layout_width="25dp"
+            android:layout_height="75dp"
+            android:layout_alignParentBottom="false"
+            android:layout_toLeftOf="@id/periodType"
+            android:ellipsize="marquee"
+            android:layout_marginRight="5dip"
+            android:singleLine="false"
+            android:textSize="12sp" android:layout_alignParentTop="true" android:layout_alignParentLeft="false"
+            />
+
+
+    <TextView
+            android:id="@+id/discipline"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="5dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/periodType"
+            android:textStyle="bold"
+            android:text="Description"
+            android:textSize="12sp" android:layout_alignParentTop="false" android:gravity="fill_horizontal|bottom"/>
+
+    <TextView
+            android:id="@+id/auditorium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/discipline"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentTop="false"
+            android:layout_alignWithParentIfMissing="false"
+            android:layout_alignLeft="@+id/discipline"
+            android:text="Auditorium"
+            android:textSize="12sp" android:layout_alignParentBottom="true" android:gravity="fill_horizontal|top"/>
+</RelativeLayout>
+

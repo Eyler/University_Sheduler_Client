@@ -3,6 +3,7 @@ package com.example.universityeventstools.app.view;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -10,15 +11,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.Window;
+import android.widget.*;
 import com.example.universityeventstools.app.R;
-import com.example.universityeventstools.app.controller.login.LoginController;
-import com.example.universityeventstools.app.model.Schedule;
+import com.example.universityeventstools.app.controller.LoginController;
 import com.example.universityeventstools.app.model.ServicePerson;
 import com.example.universityeventstools.app.util.EmailValidator;
+import com.example.universityeventstools.app.util.PasswordValidator;
 
 import java.io.IOException;
 
@@ -32,19 +31,20 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     private EditText passwordField;
     private ImageView logoImg;
     private TextView message;
-
+    private ProgressBar progress;
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
-
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
 
+        progress = (ProgressBar) findViewById(R.id.progressbar_loading);
         loginBtn = (Button) findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(this);
         registerBtn = (Button) findViewById(R.id.registerBtn);
@@ -61,9 +61,10 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
             message.setText(getIntent().getExtras().getString("message"));
             if (getIntent().getExtras().getString("messageColor").equals("green")) {
                 message.setTextColor(Color.GREEN);
+            } else if (getIntent().getExtras().getString("messageColor").equals("red")) {
+                message.setTextColor(Color.RED);
             }
         }
-
     }
 
     @Override
@@ -71,28 +72,18 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.loginBtn:
                 EmailValidator emailValidator = new EmailValidator();
-                LoginController loginController = new LoginController();
+                PasswordValidator passwordValidator = new PasswordValidator();
+                //LoginController loginController = new LoginController();
 
                 if (!emailValidator.validate(usernameField.getText().toString())) {
                     usernameField.setError("Введіть правильний e-mail");
+                    usernameField.setLines(1);
+                } else if (!passwordValidator.validate(passwordField.getText().toString())) {
+                    passwordField.setError("Введіть правильний пароль");
+                    passwordField.setLines(1);
                 } else {
-                    ServicePerson servicePerson = new ServicePerson();
-                    servicePerson.setPersonID(usernameField.getText().toString());
-                    servicePerson.setPassword(passwordField.getText().toString());
-                    Integer callBack = 0;
-                    try {
-                        callBack = loginController.login(servicePerson);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if (!callBack.equals(0)) {
-                        Intent intent = new Intent(this, ScheduleActivity.class);
-                        intent.putExtra("groupId",callBack);
-                        startActivity(intent);
-                    } else {
-                        message.setText("Неправильний E-mail чи пароль");
-                        message.setTextColor(Color.RED);
-                    }
+                    Login mt = new Login();
+                    mt.execute();
                 }
                 break;
             case R.id.registerBtn:
@@ -122,4 +113,55 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
+    class Login extends AsyncTask<Void, Void, Integer> {
+        Integer callBack = 0;
+        String tmp = "1";
+
+        @Override
+        protected void onPreExecute() {
+            loginBtn.setVisibility(View.GONE);
+            registerBtn.setVisibility(View.GONE);
+            usernameField.setVisibility(View.GONE);
+            passwordField.setVisibility(View.GONE);
+            message.setVisibility(View.GONE);
+            progress.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            LoginController loginController = new LoginController();
+            ServicePerson servicePerson = new ServicePerson();
+            servicePerson.setPersonID(usernameField.getText().toString());
+            servicePerson.setPassword(passwordField.getText().toString());
+
+            try {
+                callBack = loginController.login(servicePerson);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return callBack;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (callBack.equals(-1)) {
+                loginBtn.setVisibility(View.VISIBLE);
+                registerBtn.setVisibility(View.VISIBLE);
+                usernameField.setVisibility(View.VISIBLE);
+                passwordField.setVisibility(View.VISIBLE);
+                message.setVisibility(View.VISIBLE);
+                progress.setVisibility(View.GONE);
+                message.setText("Неправильний E-mail чи пароль");
+                message.setTextColor(Color.RED);
+            } else {
+                Intent intent = new Intent(getApplicationContext(), ScheduleActivity.class);
+                intent.putExtra("groupId", callBack);
+                intent.putExtra("username", usernameField.getText().toString());
+                startActivity(intent);
+            }
+
+
+        }
+    }
 }

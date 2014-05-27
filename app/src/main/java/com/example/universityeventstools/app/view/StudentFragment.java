@@ -12,7 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import com.example.universityeventstools.app.R;
-import com.example.universityeventstools.app.controller.registration.providers.InstituteGroupsProvider;
+import com.example.universityeventstools.app.controller.InstituteGroupsProvider;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,61 +32,66 @@ public class StudentFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final Intent intent = getActivity().getIntent();
+        Intent intent = getActivity().getIntent();
 
-        View view = inflater.inflate(R.layout.student_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_student, null);
 
         InstituteGroupsProvider instituteGroupsProvider = new InstituteGroupsProvider();
         instituteGroups = instituteGroupsProvider.getInstituteGroups();
+        if (instituteGroups.isEmpty() || instituteGroups == null) {
+            intent = new Intent(getActivity(),LoginActivity.class);
+            intent.putExtra("message", "Відсутній інтернет");
+            intent.putExtra("messageColor", "red");
+            startActivity(intent);
+        } else {
+            List<String> institutes = new LinkedList<String>();
+            institutes.addAll(instituteGroups.keySet());
 
-        List<String> institutes = new LinkedList<String>();
-        institutes.addAll(instituteGroups.keySet());
+            institutesAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, institutes);
+            institutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        institutesAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, institutes);
-        institutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            final Spinner institutesSpinner = (Spinner) view.findViewById(R.id.instituteInput);
+            institutesSpinner.setAdapter(institutesAdapter);
+            institutesSpinner.setPrompt("Інститут");
+            institutesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-        final Spinner institutesSpinner = (Spinner) view.findViewById(R.id.instituteInput);
-        institutesSpinner.setAdapter(institutesAdapter);
-        institutesSpinner.setPrompt("Інститут");
-        institutesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                    groups = instituteGroups.get(institutesSpinner.getSelectedItem());
 
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                groups = instituteGroups.get(institutesSpinner.getSelectedItem());
+                }
 
-            }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
 
-            }
-        });
+            groups = instituteGroups.get(institutesSpinner.getSelectedItem());
 
-        groups = instituteGroups.get(institutesSpinner.getSelectedItem());
+            ArrayAdapter<String> groupsAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, groups);
+            groupsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        ArrayAdapter<String> groupsAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, groups);
-        groupsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            groupsSpinner = (Spinner) view.findViewById(R.id.groupInput);
+            groupsSpinner.setAdapter(groupsAdapter);
+            groupsSpinner.setPrompt("Група");
+            pos = groupsSpinner.getSelectedItemPosition();
+            groupsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-        groupsSpinner = (Spinner) view.findViewById(R.id.groupInput);
-        groupsSpinner.setAdapter(groupsAdapter);
-        groupsSpinner.setPrompt("Група");
-        pos = groupsSpinner.getSelectedItemPosition();
-        groupsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                    pos = position;
+                    getActivity().getIntent().putExtra("group", groupsSpinner.getAdapter().getItem(pos).toString());
+                }
 
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                pos = position;
-                intent.putExtra("group",groupsSpinner.getAdapter().getItem(pos).toString());
-            }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+                }
+            });
+        }
         return view;
     }
 }
